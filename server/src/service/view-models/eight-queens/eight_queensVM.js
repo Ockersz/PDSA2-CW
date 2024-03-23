@@ -48,90 +48,121 @@ async function getSolutions(bordsize = 8) {
   return solutions;
 }
 
-async function placeQueen(board, row, col) {
+async function placeQueen(hint = [], board, row, col) {
   const data = {};
-  const respond = await isSafe(board, row, col);
-  board[row][col] = 1;
-  if (respond.isvalid) {
+  const hints = await isSafe(hint, board, row, col);
+  board[row][col] = board[row][col] === 0 ? 1 : 0;
+  if (hints.length === 0) {
     data.message = "Queen placed successfully";
     data.board = board;
+    data.hints = hints;
     data.answerstatus = ANSWERSTATUS.CORRECT;
     return data;
   } else {
-    data.message = respond.message;
-    data.cord = respond.cord;
     data.answerstatus = ANSWERSTATUS.INCORRECT;
     data.board = board;
-
+    data.hints = hints;
     return data;
   }
 }
 
-async function isSafe(board, row, col) {
+async function isSafe(hint, board, row, col) {
   const size = board.length;
+  let hints = hint || [];
+  if (board[row][col] === 0) {
+    // Check if the position is valid
+    if (row < 0 || row >= size || col < 0 || col >= size) {
+      hints.push({ message: "Invalid position", isvalid: false });
+    }
 
-  // Check if the position is valid
-  if (row < 0 || row >= size || col < 0 || col >= size) {
-    return { message: "Invalid position", isvalid: false };
+    // Check if there's a queen in the same row or column
+    for (let i = 0; i < size; i++) {
+      if (board[row][i] === 1) {
+        hints.push({
+          message: "Queen in the same row",
+          isvalid: false,
+          cord: { row: row, col: i },
+          cause: { row: row, col: col },
+        });
+      }
+      if (board[i][col] === 1) {
+        hints.push({
+          message: "Queen in the same column",
+          isvalid: false,
+          cord: { row: i, col: col },
+          cause: { row: row, col: col },
+        });
+      }
+    }
+
+    // Check diagonals
+    for (let i = 0; i < size; i++) {
+      if (board[row - i] && board[row - i][col - i] === 1) {
+        hints.push({
+          message: "Queen in the same diagonal",
+          isvalid: false,
+          cord: { row: row - i, col: col - i },
+          cause: { row: row, col: col },
+        });
+      }
+      if (board[row - i] && board[row - i][col + i] === 1) {
+        hints.push({
+          message: "Queen in the same diagonal",
+          isvalid: false,
+          cord: { row: row - i, col: col + i },
+          cause: { row: row, col: col },
+        });
+      }
+      if (board[row + i] && board[row + i][col - i] === 1) {
+        hints.push({
+          message: "Queen in the same diagonal",
+          isvalid: false,
+          cord: { row: row + i, col: col - i },
+          cause: { row: row, col: col },
+        });
+      }
+      if (board[row + i] && board[row + i][col + i] === 1) {
+        hints.push({
+          message: "Queen in the same diagonal",
+          isvalid: false,
+          cord: { row: row + i, col: col + i },
+          cause: { row: row, col: col },
+        });
+      }
+    }
+  } else {
+    hints = hints.filter(
+      (hint) => !(hint.cause.row === row && hint.cause.col === col)
+    );
   }
-
-  // Check if queen is already placed in the position
-  if (board[row][col] === 1) {
-    console.log(board);
-    return { message: "Queen already placed", isvalid: false };
-  }
-
-  // Check if there's a queen in the same row or column
-  for (let i = 0; i < size; i++) {
-    if (board[row][i] === 1) {
-      return {
-        message: "Queen in the same row",
-        isvalid: false,
-        cord: { row: row, col: i },
-      };
-    }
-    if (board[i][col] === 1) {
-      return {
-        message: "Queen in the same column",
-        isvalid: false,
-        cord: { row: i, col: col },
-      };
-    }
-  }
-
-  // Check diagonals
-  for (let i = 0; i < size; i++) {
-    if (board[row - i] && board[row - i][col - i] === 1) {
-      return {
-        message: "Queen in the same diagonal",
-        isvalid: false,
-        cord: { row: row - i, col: col - i },
-      };
-    }
-    if (board[row - i] && board[row - i][col + i] === 1) {
-      return {
-        message: "Queen in the same diagonal",
-        isvalid: false,
-        cord: { row: row - i, col: col + i },
-      };
-    }
-    if (board[row + i] && board[row + i][col - i] === 1) {
-      return {
-        message: "Queen in the same diagonal",
-        isvalid: false,
-        cord: { row: row + i, col: col - i },
-      };
-    }
-    if (board[row + i] && board[row + i][col + i] === 1) {
-      return {
-        message: "Queen in the same diagonal",
-        isvalid: false,
-        cord: { row: row + i, col: col + i },
-      };
-    }
-  }
-
-  return { message: "Good one!", isvalid: true };
+  return hints;
 }
 
-module.exports = { isSafe, placeQueen, generateBoard, getSolutions };
+async function checkSolutionWithBoard(board) {
+  const n = board.length;
+  const solutions = await getSolutions(n);
+  function areBoardsEqual(board1, board2) {
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        if (board1[i][j] !== board2[i][j]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  for (const solution of solutions) {
+    if (areBoardsEqual(board, solution)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = {
+  isSafe,
+  placeQueen,
+  generateBoard,
+  getSolutions,
+  checkSolutionWithBoard,
+};

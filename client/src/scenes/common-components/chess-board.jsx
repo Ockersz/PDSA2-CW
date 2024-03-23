@@ -1,46 +1,68 @@
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import React, { useLayoutEffect, useState } from "react";
+import InValQueen from "../../assests/crowinvalid.png";
 import Queen from "../../assests/crown.png";
 import { numberToLetter } from "../../helper-functions/helper-functions";
 
 const ChessBoard = ({ bordsize }) => {
   const [board, setBoard] = useState([[]]);
   const [isHint, setIsHint] = useState(false);
+  const [hints, setHints] = useState([]);
 
   const onUserInput = async (row, col) => {
+    hints.forEach((hint) => {
+      if (hint.cord.row === row && hint.cord.col === col) {
+        hints.splice(hints.indexOf(hint), 1);
+      }
+    });
+
     await axios
       .post("http://localhost:3000/api/eightQueens/placequeen", {
+        hints,
         board,
         row,
         col,
       })
       .then((res) => {
+        setHints(res.data.hints);
         setBoard(res.data.board);
       })
       .catch((err) => {});
   };
 
   const onanswerSubmit = async () => {
-    console.log("Hint");
+    await axios
+      .post("http://localhost:3000/api/eightQueens/checksolution", {
+        board,
+      })
+      .then((res) => {
+        if (res.data) {
+          alert("Correct Answer");
+        } else {
+          alert("Incorrect Answer");
+        }
+      })
+      .catch((err) => {});
   };
 
   useLayoutEffect(() => {
     async function createBoard() {
       await axios
-        .post("http://localhost:3000/api/eightQueens/createboard", { size: 8 })
+        .post("http://localhost:3000/api/eightQueens/createboard", {
+          size: bordsize,
+        })
         .then((res) => {
-          console.log(1);
           setBoard(res.data);
         })
         .catch((err) => {});
     }
     createBoard();
-  }, []);
+  }, [bordsize]);
 
   return (
     <Box>
@@ -60,28 +82,52 @@ const ChessBoard = ({ bordsize }) => {
       >
         {board.map((row, rowIndex) =>
           row.map((col, colIndex) => (
-            <Box
-              id={numberToLetter(rowIndex) + colIndex}
-              key={`${rowIndex + 1}-${colIndex}`}
-              width={"60px"}
-              height={"60px"}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{
-                backgroundColor:
-                  (rowIndex + colIndex) % 2 === 0 ? "#f3f4f6" : "#5d5d5d",
-              }}
-              onClick={() => onUserInput(rowIndex, colIndex)}
+            <Tooltip
+              title={
+                isHint
+                  ? hints
+                      .filter(
+                        (hint) =>
+                          hint.cause.row === rowIndex &&
+                          hint.cause.col === colIndex
+                      )
+                      .map((hint) => hint.message)
+                      .join(" and ")
+                  : ""
+              }
+              key={rowIndex + "-" + colIndex}
             >
-              {board[rowIndex][colIndex] === 1 ? (
-                <img
-                  src={Queen}
-                  alt={"Queen"}
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                />
-              ) : null}
-            </Box>
+              <Box
+                id={numberToLetter(rowIndex) + colIndex}
+                key={`${rowIndex + 1}-${colIndex}`}
+                width={"60px"}
+                height={"60px"}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  backgroundColor:
+                    (rowIndex + colIndex) % 2 === 0 ? "#f3f4f6" : "#5d5d5d",
+                }}
+                onClick={() => onUserInput(rowIndex, colIndex)}
+              >
+                {board[rowIndex][colIndex] === 1 ? (
+                  <img
+                    src={
+                      hints.some(
+                        (hint) =>
+                          hint.cord.row === rowIndex &&
+                          hint.cord.col === colIndex
+                      ) && isHint
+                        ? InValQueen
+                        : Queen
+                    }
+                    alt={"Queen"}
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
+                  />
+                ) : null}
+              </Box>
+            </Tooltip>
           ))
         )}
       </Box>

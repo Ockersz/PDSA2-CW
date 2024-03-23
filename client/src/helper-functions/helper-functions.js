@@ -21,4 +21,30 @@ function letterToNumber(letter) {
   }
 }
 
-module.exports = { letterToNumber, numberToLetter };
+function arrayEquals(array, arrayList) {
+  for (const arrayItem of arrayList) {
+    if (
+      Array.isArray(array) &&
+      Array.isArray(arrayItem) &&
+      array.length === arrayList.length
+    ) {
+      if (
+        array.every((row, rowIndex) => {
+          if (row.length === arrayItem[rowIndex].length) {
+            return row.every(
+              (val, colIndex) => val === arrayItem[rowIndex][colIndex]
+            );
+          } else {
+            return false;
+          }
+        })
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+module.exports = { letterToNumber, numberToLetter, arrayEquals };
