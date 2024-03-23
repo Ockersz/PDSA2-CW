@@ -5,3 +5,11 @@ const GAMETYPES = {
   REMEMBER_VAL_INDEX: 4,
   TIC_TAC_TOE: 5,
 };
+
+const ANSWERSTATUS = {
+  PENDING: 1,
+  CORRECT: 2,
+  INCORRECT: 3,
+};
+
+module.exports = { ANSWERSTATUS, GAMETYPES };

@@ -8,5 +8,6 @@ router.use(bodyParser.json());
 
 router.post("/createboard", controller.createGame);
 router.post("/placequeen", controller.placequeen);
+router.post("/getsolutions", controller.getsolutions);
 
 module.exports = router;
