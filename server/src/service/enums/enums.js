@@ -12,4 +12,14 @@ const ANSWERSTATUS = {
   INCORRECT: 3,
 };
 
-module.exports = { ANSWERSTATUS, GAMETYPES };
+const SORTTYPES = {
+  BUBBLE: 1,
+  QUICK: 2,
+  INSERTION: 3,
+  MERGE: 4,
+  RADIX: 5,
+  SHELL: 6,
+  TIM: 7,
+};
+
+module.exports = { ANSWERSTATUS, GAMETYPES, SORTTYPES };

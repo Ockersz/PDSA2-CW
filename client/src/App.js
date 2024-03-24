@@ -1,9 +1,9 @@
-import Game from "./scenes/N_Queens/game";
+import GameTTT from "./scenes/Tic_Tac_Toe/game";
 
 function App() {
   return (
     <div className="App">
-      <Game />
+      <GameTTT />
     </div>
   );
 }
