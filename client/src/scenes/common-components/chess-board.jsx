@@ -22,7 +22,7 @@ const ChessBoard = ({ bordsize }) => {
     });
 
     await axios
-      .post("http://localhost:3000/api/eightQueens/placequeen", {
+      .post("eightQueens/placequeen", {
         hints,
         board,
         row,
@@ -37,7 +37,7 @@ const ChessBoard = ({ bordsize }) => {
 
   const onanswerSubmit = async () => {
     await axios
-      .post("http://localhost:3000/api/eightQueens/checksolution", {
+      .post("eightQueens/checksolution", {
         board,
       })
       .then((res) => {
@@ -53,7 +53,7 @@ const ChessBoard = ({ bordsize }) => {
   useLayoutEffect(() => {
     async function createBoard() {
       await axios
-        .post("http://localhost:3000/api/eightQueens/createboard", {
+        .post("eightQueens/createboard", {
           size: bordsize,
         })
         .then((res) => {
