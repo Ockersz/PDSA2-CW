@@ -3,7 +3,7 @@ const {
   placeQueen,
   getSolutions,
   checkSolutionWithBoard,
-} = require("../view-models/eight-queens/eight_queensVM");
+} = require("../models/eight-queens/eight_queensModel");
 require("dotenv").config();
 
 async function placequeen(req, res) {
