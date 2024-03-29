@@ -8,5 +8,6 @@ router.use(bodyParser.json());
 
 router.get("/genarray", controller.generateArray);
 router.get("/gettime", controller.getTimeTaken);
+router.get("/startgame", controller.startgame);
 
 module.exports = router;

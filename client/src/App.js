@@ -1,9 +1,9 @@
-import GameTTT from "./scenes/Tic_Tac_Toe/game";
+import RememberValueIndex from "./scenes/Remember_Value/game";
 
 function App() {
   return (
     <div className="App">
-      <GameTTT />
+      <RememberValueIndex />
     </div>
   );
 }

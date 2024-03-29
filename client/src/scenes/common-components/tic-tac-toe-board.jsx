@@ -8,6 +8,7 @@ const TicTacToeBoard = () => {
   const [board, setBoard] = useState([[]]);
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [winningCords, setWinningCords] = useState([]);
 
   useLayoutEffect(() => {

@@ -17,6 +17,26 @@ function generateNumberArray(length) {
   return array;
 }
 
+function sortWithAlgorithm(algorithmType, array) {
+  let sortedArray = [];
+  if (algorithmType === SORTTYPES.BUBBLE) {
+    sortedArray = bubbleSort(array);
+  } else if (algorithmType === SORTTYPES.QUICK) {
+    sortedArray = quickSort(array);
+  } else if (algorithmType === SORTTYPES.INSERTION) {
+    sortedArray = insertionSort(array);
+  } else if (algorithmType === SORTTYPES.MERGE) {
+    sortedArray = mergeSort(array);
+  } else if (algorithmType === SORTTYPES.RADIX) {
+    sortedArray = radixSort(array);
+  } else if (algorithmType === SORTTYPES.TIM) {
+    sortedArray = timSort(array);
+  } else if (algorithmType === SORTTYPES.SHELL) {
+    sortedArray = shellSort(array);
+  }
+  return sortedArray;
+}
+
 function getTimeForAlgorithm(algorithmType, array) {
   const startTime = process.hrtime();
   let sortedArray = [];
@@ -40,8 +60,7 @@ function getTimeForAlgorithm(algorithmType, array) {
   return timeTaken;
 }
 
-function getTimeTakens() {
-  let array = generateNumberArray();
+function getTimeTakens(array) {
   let bubbleSortTime = getTimeForAlgorithm(SORTTYPES.BUBBLE, array);
   let insertionSortTime = getTimeForAlgorithm(SORTTYPES.INSERTION, array);
   let mergeSortTime = getTimeForAlgorithm(SORTTYPES.MERGE, array);
@@ -49,18 +68,36 @@ function getTimeTakens() {
   let shellSortTime = getTimeForAlgorithm(SORTTYPES.SHELL, array);
   let quickSortTime = getTimeForAlgorithm(SORTTYPES.QUICK, array);
   let timSortTime = getTimeForAlgorithm(SORTTYPES.TIM, array);
+  return [
+    { type: SORTTYPES.BUBBLE, timeFunction: bubbleSortTime },
+    { type: SORTTYPES.INSERTION, timeFunction: insertionSortTime },
+    { type: SORTTYPES.MERGE, timeFunction: mergeSortTime },
+    { type: SORTTYPES.RADIX, timeFunction: radixSortTime },
+    { type: SORTTYPES.SHELL, timeFunction: shellSortTime },
+    { type: SORTTYPES.QUICK, timeFunction: quickSortTime },
+    { type: SORTTYPES.TIM, timeFunction: timSortTime },
+  ];
+}
+
+function startGame() {
+  let array = generateNumberArray();
+  let sortedTimes = getTimeTakens(array);
+
+  let fastestAlgorithm = sortedTimes.reduce((prev, current) =>
+    prev.timeFunction < current.timeFunction ? prev : current
+  ).type;
+  //sort the array with the fastest algorithm
+  let sortedArray = sortWithAlgorithm(parseInt(fastestAlgorithm), array);
+
   return {
-    bubbleSortTime,
-    insertionSortTime,
-    mergeSortTime,
-    radixSortTime,
-    shellSortTime,
-    quickSortTime,
-    timSortTime,
+    sortedTimes,
+    fastestAlgorithm,
+    sortedArray,
   };
 }
 
 module.exports = {
   generateNumberArray: generateNumberArray,
   getTimeForAlgorithm: getTimeTakens,
+  startGame: startGame,
 };

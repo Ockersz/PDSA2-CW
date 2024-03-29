@@ -110,6 +110,8 @@ function timSort(arr) {
       if (mid < right) merge(arr, left, mid, right);
     }
   }
+
+  return arr;
 }
 
 module.exports = {
