@@ -6,9 +6,9 @@ function jumpSearch(arr, x, n) {
   // present (if it is present)
   let prev = 0;
   for (
-    let minStep = Math.Min(step, n) - 1;
+    let minStep = Math.min(step, n) - 1;
     arr[minStep] < x;
-    minStep = Math.Min(step, n) - 1
+    minStep = Math.min(step, n) - 1
   ) {
     prev = step;
     step += Math.sqrt(n);
@@ -29,3 +29,5 @@ function jumpSearch(arr, x, n) {
 
   return -1;
 }
+
+module.exports = { jumpSearch };

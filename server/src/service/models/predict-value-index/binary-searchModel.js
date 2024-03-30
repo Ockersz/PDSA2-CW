@@ -21,3 +21,5 @@ function binarySearch(arr, x) {
   // present in array
   return -1;
 }
+
+module.exports = { binarySearch };

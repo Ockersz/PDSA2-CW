@@ -1,6 +1,6 @@
 function binarySearch(arr, l, r, x) {
   if (r >= l) {
-    let mid = l + (r - l) / 2;
+    let mid = Math.floor((r + l) / 2);
 
     // If the element is present
     // at the middle itself
@@ -8,7 +8,7 @@ function binarySearch(arr, l, r, x) {
 
     // If element is smaller than
     // mid, then it can only be
-    // present n left subarray
+    // present in left subarray
     if (arr[mid] > x) return binarySearch(arr, l, mid - 1, x);
 
     // Else the element can only
@@ -23,7 +23,7 @@ function binarySearch(arr, l, r, x) {
 
 // Returns position of first
 // occurrence of x in array
-function exponentialSearch(arr, n, x) {
+function exponentialSearch(arr, x, n) {
   // If x is present at
   // first location itself
   if (arr[0] == x) return 0;
@@ -37,3 +37,5 @@ function exponentialSearch(arr, n, x) {
   // the found range.
   return binarySearch(arr, i / 2, Math.min(i, n - 1), x);
 }
+
+module.exports = { exponentialSearch };
