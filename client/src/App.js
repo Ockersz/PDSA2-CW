@@ -1,9 +1,9 @@
-import RememberValueIndex from "./scenes/Remember_Value/game";
+import ShortestPath from "./scenes/Shortest_Path/game-test.jsx";
 
 function App() {
   return (
     <div className="App">
-      <RememberValueIndex />
+      <ShortestPath />
     </div>
   );
 }

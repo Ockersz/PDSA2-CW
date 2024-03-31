@@ -21,6 +21,35 @@ function letterToNumber(letter) {
   }
 }
 
+function createDirectedMatrix(dimension) {
+  if (dimension <= 0) {
+    throw new Error("Dimension must be a positive integer");
+  }
+
+  const matrix = [];
+  for (let i = 0; i < dimension; i++) {
+    matrix.push(new Array(dimension).fill(-1));
+  }
+
+  for (let i = 0; i < dimension; i++) {
+    for (let j = 0; j < dimension; j++) {
+      if (i !== j) {
+        if (matrix[i][j] !== 0) {
+          if (Math.random() > 0.5) {
+            matrix[i][j] = Math.floor(Math.random() * 46) + 5;
+            matrix[j][i] = 0;
+          } else {
+            matrix[j][i] = Math.floor(Math.random() * 46) + 5;
+            matrix[i][j] = 0;
+          }
+        }
+      }
+    }
+  }
+
+  return matrix;
+}
+
 function arrayEquals(array, arrayList) {
   for (const arrayItem of arrayList) {
     if (
@@ -47,4 +76,9 @@ function arrayEquals(array, arrayList) {
   return false;
 }
 
-module.exports = { letterToNumber, numberToLetter, arrayEquals };
+module.exports = {
+  letterToNumber,
+  numberToLetter,
+  arrayEquals,
+  createDirectedMatrix,
+};
