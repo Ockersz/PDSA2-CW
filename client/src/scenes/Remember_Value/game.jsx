@@ -122,6 +122,8 @@ const RememberValueIndex = () => {
       clearTimeout(timeoutId);
       setIsGameStarted(false);
       setDisplayedValue(null);
+      setIsPlaying(false);
+      setCurrentIndex(0);
     }
   };
 

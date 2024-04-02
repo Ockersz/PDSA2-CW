@@ -1,5 +1,5 @@
 import React from "react";
-import Line from "./components/line";
+import Edge from "./components/Edge";
 
 const Graph = () => {
   const graph = {
@@ -11,8 +11,8 @@ const Graph = () => {
 
   return (
     <div style={{ height: "100%", position: "relative" }}>
-      <Line x1={50} y1={50} x2={200} y2={250} />
-      <Line x1={50} y1={50} x2={100} y2={150} />
+      <Edge x1={50} y1={50} x2={200} y2={250} />
+      <Edge x1={50} y1={50} x2={100} y2={150} />
     </div>
   );
 };

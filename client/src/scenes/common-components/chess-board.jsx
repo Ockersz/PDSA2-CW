@@ -128,7 +128,16 @@ const ChessBoard = ({ bordsize }) => {
           <IconButton
             aria-label="restart"
             color={"primary"}
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              axios
+                .post("eightQueens/createboard", {
+                  size: bordsize,
+                })
+                .then((res) => {
+                  setBoard(res.data);
+                })
+                .catch((err) => {});
+            }}
           >
             <RestartAltIcon />
           </IconButton>
