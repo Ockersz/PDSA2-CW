@@ -37,7 +37,7 @@ const Game = () => {
               error={isNaN(input) || input === ""}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              sx={{ textAlign: "center", "& input": { textAlign: "center" } }} // Centering input text
+              sx={{ textAlign: "center", "& input": { textAlign: "center" } }}
             />
 
             <Stack direction="row" spacing={2} justifyContent="center">
