@@ -1,3 +1,4 @@
+const nQueensModel = require("../../db-models/nQueensModel");
 const { ANSWERSTATUS } = require("../../enums/enums");
 
 async function generateBoard(bordsize = 8) {
@@ -159,10 +160,37 @@ async function checkSolutionWithBoard(board) {
   return false;
 }
 
+async function saveSolution(board, player) {
+  const allSolutions = await getSolutions(board.length);
+
+  const allSolutionsInDb = await nQueensModel.find();
+  if (allSolutionsInDb.length === allSolutions.length) {
+    await nQueensModel.deleteMany();
+  }
+
+  const answer = await nQueensModel.findOne({ solution: board });
+
+  if (answer) {
+    return {
+      message: "Unfortunately solution already exists",
+      answer,
+      status: "error",
+    };
+  }
+
+  const newAnswer = new nQueensModel({
+    n: board.length,
+    solution: board,
+    player,
+  });
+  return await newAnswer.save();
+}
+
 module.exports = {
   isSafe,
   placeQueen,
   generateBoard,
   getSolutions,
   checkSolutionWithBoard,
+  saveSolution,
 };

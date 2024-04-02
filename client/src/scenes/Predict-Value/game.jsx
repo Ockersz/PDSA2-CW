@@ -147,6 +147,14 @@ const PredictValueGame = () => {
                     Swal.fire({
                       title: "Correct!",
                       icon: "success",
+                    }).then(() => {
+                      axios.post("predictValueIndex/saveSolution", {
+                        findVal: randomNumber,
+                        gameArray: sortedArray,
+                        answer: correctIndex,
+                        options: indexOptions,
+                        player: localStorage.getItem("username"),
+                      });
                     });
                   } else {
                     Swal.fire({
@@ -154,6 +162,7 @@ const PredictValueGame = () => {
                       icon: "error",
                     });
                   }
+                  start();
                 }}
               >
                 {option}

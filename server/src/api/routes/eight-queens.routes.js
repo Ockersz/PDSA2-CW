@@ -10,5 +10,6 @@ router.post("/createboard", controller.createGame);
 router.post("/placequeen", controller.placequeen);
 router.post("/getsolutions", controller.getsolutions);
 router.post("/checksolution", controller.checksolutionWithBoard);
+router.post("/saveSolution", controller.saveSol);
 
 module.exports = router;

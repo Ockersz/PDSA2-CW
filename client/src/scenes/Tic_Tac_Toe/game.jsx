@@ -141,6 +141,19 @@ const GameTTT = () => {
                             setBoard(res.data.board);
                             setIsGameOver(res.data.gameOver);
                             setWinner(res.data.winner);
+                            if (res.data.winner === "O") {
+                              axios
+                                .post("ticTacToe/saveSolution", {
+                                  board: board,
+                                  player: localStorage.getItem("username"),
+                                })
+                                .then(() => {
+                                  console.log("Score updated");
+                                })
+                                .catch(() => {
+                                  console.log("Score not updated");
+                                });
+                            }
                           })
                           .catch((err) => {});
                       }}

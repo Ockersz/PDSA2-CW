@@ -74,7 +74,31 @@ const ChessBoard = ({ bordsize }) => {
             icon: "success",
             confirmButtonText: "Cool",
           }).then(() => {
-            window.location.reload();
+            axios
+              .post("eightQueens/saveSolution", {
+                board: board,
+                player: localStorage.getItem("username"),
+              })
+              .then((res) => {
+                if (res.data.status && res.data.status === "error") {
+                  Swal.fire({
+                    title: "Sorry",
+                    text: res.data.message,
+                    icon: "warning",
+                    confirmButtonText: "Try Again",
+                  });
+                }
+              });
+
+            axios
+              .post("eightQueens/createboard", {
+                size: bordsize,
+              })
+              .then((res) => {
+                setBoard(res.data);
+                setMaxQueens(0);
+              })
+              .catch((err) => {});
           });
         } else {
           Swal.fire({
@@ -83,7 +107,15 @@ const ChessBoard = ({ bordsize }) => {
             icon: "error",
             confirmButtonText: "Try Again",
           }).then(() => {
-            window.location.reload();
+            axios
+              .post("eightQueens/createboard", {
+                size: bordsize,
+              })
+              .then((res) => {
+                setBoard(res.data);
+                setMaxQueens(0);
+              })
+              .catch((err) => {});
           });
         }
       })
@@ -94,7 +126,15 @@ const ChessBoard = ({ bordsize }) => {
           icon: "question",
           confirmButtonText: "Try Again",
         }).then(() => {
-          window.location.reload();
+          axios
+            .post("eightQueens/createboard", {
+              size: bordsize,
+            })
+            .then((res) => {
+              setBoard(res.data);
+              setMaxQueens(0);
+            })
+            .catch((err) => {});
         });
       });
   };
@@ -135,6 +175,7 @@ const ChessBoard = ({ bordsize }) => {
                 })
                 .then((res) => {
                   setBoard(res.data);
+                  setMaxQueens(0);
                 })
                 .catch((err) => {});
             }}

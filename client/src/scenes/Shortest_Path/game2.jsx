@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import styled from "@emotion/styled";
 import { Box, Button, Card, Typography } from "@mui/material";
 import axios from "axios";
-import styled from "@emotion/styled";
+import React, { useState } from "react";
 
 import Edge from "./components/Edge";
 import Node from "./components/Node";
@@ -90,7 +90,6 @@ function ShortestPath() {
   };
 
   const positionNodes = (nodesData) => {
-    // Simple logic to position nodes in a polygon-like shape with random variations
     const radius = 300;
     const center = { x: 400, y: 400 };
     const angleStep = (2 * Math.PI) / nodesData.length;
@@ -149,7 +148,6 @@ function ShortestPath() {
   };
 
   const handleEnd = () => {
-    // Reset state
     setStart("?");
     setDestination("?");
     setHighlightedEdges(new Set());
@@ -181,12 +179,10 @@ function ShortestPath() {
     const lastIndex = newPath.length - 1;
 
     if (newPath.includes(nodeId)) {
-      // Remove node if it's the last in the path
-      if (newPath[lastIndex] === nodeId  && nodeId !== start) {
+      if (newPath[lastIndex] === nodeId && nodeId !== start) {
         newPath.pop();
       }
     } else {
-      // Add node if adjacent to the last node in the path or if the path is empty
       if (
         lastIndex === -1 ||
         edges.some(
@@ -248,7 +244,7 @@ function ShortestPath() {
           </InfoBox>
         </Box>
 
-        <Button variant="contained" color="secondary" onClick={handleReset} >
+        <Button variant="contained" color="secondary" onClick={handleReset}>
           Reset
         </Button>
       </Sidebar>
@@ -283,7 +279,14 @@ function ShortestPath() {
                   length={edge.length}
                   onMouseEnter={() => handleEdgeMouseEnter(index)}
                   onMouseLeave={handleEdgeMouseLeave}
-                  isInPath={selectedPath.includes(edge.from) && selectedPath.includes(edge.to) && Math.abs(selectedPath.indexOf(edge.from) - selectedPath.indexOf(edge.to)) === 1}
+                  isInPath={
+                    selectedPath.includes(edge.from) &&
+                    selectedPath.includes(edge.to) &&
+                    Math.abs(
+                      selectedPath.indexOf(edge.from) -
+                        selectedPath.indexOf(edge.to)
+                    ) === 1
+                  }
                   highlightedEdges={highlightedEdges}
                 />
               ))}

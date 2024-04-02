@@ -6,6 +6,8 @@ const { radixSort } = require("./radix-sortModel");
 const { shellSort } = require("./shell-sortModel");
 const { quickSort } = require("./quick-sortModel");
 const { timSort } = require("./tim-sortModel");
+const rememberValIndexModel = require("../../db-models/rememberValIndex");
+const sortedArrAlgoTimesModel = require("../../db-models/sortedArrAlgoTimes");
 
 function generateNumberArray(length) {
   let arrayLength = length || 5000;
@@ -60,7 +62,7 @@ function getTimeForAlgorithm(algorithmType, array) {
   return timeTaken;
 }
 
-function getTimeTakens(array) {
+async function getTimeTakens(array) {
   let bubbleSortTime = getTimeForAlgorithm(SORTTYPES.BUBBLE, array);
   let insertionSortTime = getTimeForAlgorithm(SORTTYPES.INSERTION, array);
   let mergeSortTime = getTimeForAlgorithm(SORTTYPES.MERGE, array);
@@ -68,6 +70,17 @@ function getTimeTakens(array) {
   let shellSortTime = getTimeForAlgorithm(SORTTYPES.SHELL, array);
   let quickSortTime = getTimeForAlgorithm(SORTTYPES.QUICK, array);
   let timSortTime = getTimeForAlgorithm(SORTTYPES.TIM, array);
+
+  await sortedArrAlgoTimesModel.create({
+    bubbleSortTime: bubbleSortTime,
+    insertionSortTime: insertionSortTime,
+    mergeSortTime: mergeSortTime,
+    quickSortTime: quickSortTime,
+    radixSortTime: radixSortTime,
+    shellSortTime: shellSortTime,
+    timSortTime: timSortTime,
+  });
+
   return [
     { type: SORTTYPES.BUBBLE, timeFunction: bubbleSortTime },
     { type: SORTTYPES.INSERTION, timeFunction: insertionSortTime },
@@ -79,9 +92,9 @@ function getTimeTakens(array) {
   ];
 }
 
-function startGame() {
+async function startGame() {
   let array = generateNumberArray();
-  let sortedTimes = getTimeTakens(array);
+  let sortedTimes = await getTimeTakens(array);
 
   let fastestAlgorithm = sortedTimes.reduce((prev, current) =>
     prev.timeFunction < current.timeFunction ? prev : current
@@ -96,8 +109,19 @@ function startGame() {
   };
 }
 
+async function saveSolution(answer1, answer2, gameArray, player) {
+  const newGame = new rememberValIndexModel({
+    answer1,
+    answer2,
+    gameArray,
+    player,
+  });
+  return await newGame.save();
+}
+
 module.exports = {
   generateNumberArray: generateNumberArray,
   getTimeForAlgorithm: getTimeTakens,
   startGame: startGame,
+  saveSolution: saveSolution,
 };

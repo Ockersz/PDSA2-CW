@@ -3,6 +3,7 @@ const { binarySearch } = require("./binary-searchModel");
 const { jumpSearch } = require("./jump-searchModel");
 const { exponentialSearch } = require("./exponential-searchModel");
 const { fibMonaccianSearch } = require("./fibonacci-searchModel");
+const predictValIndexModel = require("../../db-models/predictValIndex");
 
 function generateNumberArray(length) {
   let arrayLength = length || 5000;
@@ -47,4 +48,15 @@ function getIndexOfValue() {
   return { findVal, array, searchResults };
 }
 
-module.exports = { getIndexOfValue };
+async function saveSolution(findVal, gameArray, answer, options, player) {
+  const result = await predictValIndexModel.create({
+    findVal,
+    gameArray,
+    answer,
+    options,
+    player,
+  });
+  return result;
+}
+
+module.exports = { getIndexOfValue, saveSolution };

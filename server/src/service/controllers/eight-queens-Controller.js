@@ -3,6 +3,7 @@ const {
   placeQueen,
   getSolutions,
   checkSolutionWithBoard,
+  saveSolution,
 } = require("../models/eight-queens/eight_queensModel");
 require("dotenv").config();
 
@@ -26,9 +27,14 @@ async function checksolutionWithBoard(req, res) {
   res.send(await checkSolutionWithBoard(req.body.board));
 }
 
+async function saveSol(req, res) {
+  res.send(await saveSolution(req.body.board, req.body.player));
+}
+
 module.exports = {
   getsolutions: getsolutions,
   placequeen: placequeen,
   createGame: createGame,
   checksolutionWithBoard: checksolutionWithBoard,
+  saveSol: saveSol,
 };

@@ -1,3 +1,5 @@
+const ticTacToeModel = require("../../db-models/ticTacToeModel");
+
 // Global variables
 let opponent = "X";
 let player = "O";
@@ -196,7 +198,17 @@ async function minimax(inputBoard, depth, isMaximizing) {
   }
 }
 
+async function saveSolution(board, player) {
+  await ticTacToeModel.create({
+    board: board,
+    player: player,
+  });
+
+  return "Solution saved";
+}
+
 module.exports = {
   createBoard: createBoard,
   makeMove: makeMove,
+  saveSolution: saveSolution,
 };

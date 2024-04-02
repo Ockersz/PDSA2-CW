@@ -16,7 +16,6 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Swal from "sweetalert2";
 
 const RememberValueIndex = () => {
-  const [sortedArray, setSortedArray] = useState([]);
   const [shortenedArray, setShortenedArray] = useState([]);
   const [timesTaken, setTimesTaken] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,7 +48,6 @@ const RememberValueIndex = () => {
     await axios
       .get("rememberValueIndex/startgame")
       .then((res) => {
-        setSortedArray(res.data.sortedArray);
         setShortenedArray(res.data.sortedArray.slice(0, 20));
         setTimesTaken(res.data.timesTaken);
       })
@@ -102,7 +100,16 @@ const RememberValueIndex = () => {
         icon: "success",
         title: "Correct!",
         text: "You got it right!",
-      });
+      })
+        .then(() => {
+          axios.post("rememberValueIndex/saveSolution", {
+            answer1: randomAnswer,
+            answer2: randomAnswer2,
+            gameArray: shortenedArray,
+            player: localStorage.getItem("username"),
+          });
+        })
+        .catch((err) => {});
     } else {
       Swal.fire({
         icon: "error",
