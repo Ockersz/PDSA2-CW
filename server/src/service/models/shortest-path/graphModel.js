@@ -14,11 +14,6 @@ function createGraph(
   return graph;
 }
 
-// Function to add an edge between two vertices
-function addEdge(graph, source, destination, weight) {
-  graph[source][destination] = weight;
-}
-
 // Function to add an edge using vertex labels
 function addEdgeByLabels(graph, sourceLabel, destinationLabel, weight) {
   if (!graph[sourceLabel] || !graph[destinationLabel]) {

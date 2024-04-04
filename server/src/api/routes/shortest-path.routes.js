@@ -7,5 +7,6 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.get("/startgame", controller.generateRandomDistancesController);
+router.post("/submit", controller.submitDistanceController);
 
 module.exports = router;

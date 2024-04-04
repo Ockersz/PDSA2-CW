@@ -3,6 +3,7 @@ import { Box, Button, Card, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 
+import Swal from "sweetalert2";
 import Edge from "./components/Edge";
 import Node from "./components/Node";
 
@@ -62,12 +63,13 @@ function ShortestPath() {
   const [graphLoaded, setGraphLoaded] = useState(false);
   const [selectedPath, setSelectedPath] = useState([]);
   const [totalDistance, setTotalDistance] = useState(0);
+  const [graph, setGraph] = useState({});
 
   const fetchGraphData = async () => {
     try {
       const response = await axios.get("shortestPath/startgame");
       const data = response.data;
-
+      setGraph(data.graph);
       const nodes = Object.keys(data.graph).map((key) => ({ id: key }));
       const edges = [];
 
@@ -204,6 +206,41 @@ function ShortestPath() {
     setTotalDistance(0);
   };
 
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post("shortestPath/submit", {
+        path: selectedPath,
+        graph: graph,
+        source: start,
+        destination: destination,
+        player: localStorage.getItem("username"),
+      });
+      const data = response.data;
+      if (data.correct) {
+        Swal.fire({
+          title: "Correct Answer",
+          text: "You have successfully found the shortest path!",
+          icon: "success",
+          confirmButtonText: "Cool",
+        }).then(() => {
+          handleEnd();
+          handleStart();
+        });
+      } else {
+        Swal.fire({
+          title: "Incorrect Answer",
+          text: "Try again!",
+          icon: "error",
+          confirmButtonText: "Cool",
+        }).then(() => {
+          handleReset();
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting answer:", error);
+    }
+  };
+
   return (
     <Container>
       <Sidebar>
@@ -246,6 +283,9 @@ function ShortestPath() {
 
         <Button variant="contained" color="secondary" onClick={handleReset}>
           Reset
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Submit Answer
         </Button>
       </Sidebar>
 
