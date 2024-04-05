@@ -39,17 +39,6 @@ function startGame() {
   delete graph[sourceCity][destinationCity];
   delete graph[destinationCity][sourceCity];
 
-  let vertices = Object.keys(graph);
-
-  // for (let i = 0; i < vertices.length; i++) {
-  //   for (let j = 0; j < i; j++) {
-  //     if (Math.random() < 0.7 && Object.keys(graph[vertices[i]]).length > 1) {
-  //       delete graph[vertices[i]][vertices[j]];
-  //       delete graph[vertices[j]][vertices[i]];
-  //     }
-  //   }
-  // }
-
   return {
     graph,
     sourceCity,

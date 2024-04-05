@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import React, { useState } from "react";
+import Backdrop from "../../assests/gamesuitebg.png";
 import Game from "../N_Queens/game";
 import PredictValueGame from "../Predict-Value/game";
 import RememberValueIndex from "../Remember_Value/game";
 import ShortestPath from "../Shortest_Path/game2";
 import GameTTT from "../Tic_Tac_Toe/game";
+import Chart from "../Time_Charts/Chart";
 import CustomAppBar from "./AppBar";
 import DrawerList from "./DrawerList";
 const Home = () => {
@@ -35,11 +37,49 @@ const Home = () => {
             <PredictValueGame />
           ) : component === "/shortest_path" ? (
             <ShortestPath />
+          ) : component === "/charts" ? (
+            <Chart />
           ) : (
             <div>Invalid Component</div>
           )
         ) : (
-          <div>Welcome to Game Suite</div>
+          <div>
+            <img
+              src={Backdrop}
+              alt="Game Suite"
+              style={{ width: "100%", height: "100%" }}
+            />
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                width: "100%",
+                height: "30%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  textAlign: "center",
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <h1>Welcome to Game Suite</h1>
+                <h3>Click on the menu to select a game</h3>
+                <br />
+                <h3>PDSA CW - 1 </h3>
+              </Box>
+            </Box>
+          </div>
         )}
       </Box>
 

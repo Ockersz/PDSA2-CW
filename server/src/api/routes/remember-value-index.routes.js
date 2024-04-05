@@ -10,5 +10,6 @@ router.get("/genarray", controller.generateArray);
 router.get("/gettime", controller.getTimeTaken);
 router.get("/startgame", controller.startgame);
 router.post("/saveSolution", controller.saveSol);
+router.get("/getlasttime", controller.getlasttime);
 
 module.exports = router;

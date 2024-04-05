@@ -1,5 +1,5 @@
-[
-  ["X", "O", "_"],
-  ["X", "X", "O"],
-  ["O", "_", "X"]
-]
+{
+  "correct": false,
+  "correctPath": ["I", "H", "J"],
+  "playerPath": ["I", "E", "J"]
+}

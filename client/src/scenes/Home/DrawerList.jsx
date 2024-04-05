@@ -41,6 +41,7 @@ const DrawerList = ({ onClose, selectComp }) => {
           { label: "Remember Value Index", path: "/remember_value_index" },
           { label: "Predict Value Index", path: "/predict_value_index" },
           { label: "Shortest Path", path: "/shortest_path" },
+          { label: "Charts", path: "/charts" },
         ].map((text, index) => (
           <ListItem key={text.label} disablePadding>
             <ListItemButton

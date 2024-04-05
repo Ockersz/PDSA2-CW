@@ -108,20 +108,32 @@ const PredictValueGame = () => {
           display={"grid"}
           gridTemplateRows="repeat(5, 1fr)"
         >
-          <Box display={"grid"} gridTemplateColumns="repeat(5, 1fr)" gap={1}>
+          <Box
+            display={"grid"}
+            gridTemplateColumns="repeat(5, 1fr)"
+            gap={1}
+            sx={{
+              fontSize: 20,
+              fontWeight: "bold",
+              backgroundColor: "#f3f4f6",
+            }}
+          >
             <Box
               gridColumn={"span 1"}
               display={"flex"}
               justifyContent={"center"}
               alignItems={"center"}
             >
-              <span>Value:</span>
+              <span>Find Index of Value:</span>
             </Box>
             <Box
               display={"flex"}
               justifyContent={"center"}
               alignItems={"center"}
-              fontSize={20}
+              fontSize={30}
+              sx={{
+                color: "blue",
+              }}
               gridColumn={"span 4"}
             >
               <span>{randomNumber}</span>

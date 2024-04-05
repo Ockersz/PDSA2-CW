@@ -119,9 +119,29 @@ async function saveSolution(answer1, answer2, gameArray, player) {
   return await newGame.save();
 }
 
+// const shortestPathTimeSchema = new Schema({
+//   dijkstra: {
+//     type: Number,
+//     required: true,
+//   },
+//   bellmanFord: {
+//     type: Number,
+//     required: true,
+//   },
+//   date: {
+//     type: Date,
+//     default: Date.now,
+//   },
+// });
+
+async function getLastTimeDb() {
+  return await sortedArrAlgoTimesModel.findOne().sort({ _id: -1 });
+}
+
 module.exports = {
   generateNumberArray: generateNumberArray,
   getTimeForAlgorithm: getTimeTakens,
   startGame: startGame,
   saveSolution: saveSolution,
+  getLastTimeDb: getLastTimeDb,
 };

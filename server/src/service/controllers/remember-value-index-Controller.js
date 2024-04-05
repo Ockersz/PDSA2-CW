@@ -3,6 +3,7 @@ const {
   getTimeForAlgorithm,
   startGame,
   saveSolution,
+  getLastTimeDb,
 } = require("../models/remember-value-index/remember-value-indexModel");
 
 async function generateArray(req, res) {
@@ -30,9 +31,15 @@ async function saveSol(req, res) {
   res.send(result);
 }
 
+async function getlasttime(req, res) {
+  const result = await getLastTimeDb();
+  res.send(result);
+}
+
 module.exports = {
   generateArray,
   getTimeTaken,
   startgame,
   saveSol,
+  getlasttime,
 };
