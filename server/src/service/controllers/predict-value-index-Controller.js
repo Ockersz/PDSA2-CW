@@ -1,6 +1,7 @@
 const {
   getIndexOfValue,
   saveSolution,
+  getTimes,
 } = require("../models/predict-value-index/predict-value-indexModel");
 
 async function getIndexValue(req, res) {
@@ -19,7 +20,13 @@ async function saveSol(req, res) {
   res.send(result);
 }
 
+async function getTimesController(req, res) {
+  const result = await getTimes();
+  res.send(result);
+}
+
 module.exports = {
   getIndexValue,
   saveSol,
+  getTimesController,
 };

@@ -4,6 +4,7 @@ const { jumpSearch } = require("./jump-searchModel");
 const { exponentialSearch } = require("./exponential-searchModel");
 const { fibMonaccianSearch } = require("./fibonacci-searchModel");
 const predictValIndexModel = require("../../db-models/predictValIndex");
+const predictValueAlgoTimes = require("../../db-models/predictValueAlgoTimes");
 
 function generateNumberArray(length) {
   let arrayLength = length || 5000;
@@ -16,17 +17,13 @@ function generateNumberArray(length) {
 }
 
 function getIndexOfValue() {
-  // Step 1: Generate random number array
   const array = generateNumberArray();
   const length = array.length;
 
-  // Step 2: Sort the array
   const sortedArray = timSort(array);
 
-  // Step 3: Choose a random value from the array
   const findVal = array[Math.floor(Math.random() * length)];
 
-  // Step 4: Perform searches with different algorithms
   const searchAlgorithms = [
     { name: "Binary Search", func: binarySearch },
     { name: "Jump Search", func: jumpSearch },
@@ -43,9 +40,19 @@ function getIndexOfValue() {
     searchResults.push({ algorithm: algorithm.name, index, timeTaken });
   });
 
-  // Step 5: Record time taken and index found for each search algorithm
-  // Step 6: Return results
+  predictValueAlgoTimes.create({
+    binarySearch: searchResults[0].timeTaken,
+    jumpSearch: searchResults[1].timeTaken,
+    exponentialSearch: searchResults[2].timeTaken,
+    fibonacciSearch: searchResults[3].timeTaken,
+  });
+
   return { findVal, array, searchResults };
+}
+
+async function getTimes() {
+  const lastDbTime = await predictValueAlgoTimes.findOne().sort({ _id: -1 });
+  return lastDbTime;
 }
 
 async function saveSolution(findVal, gameArray, answer, options, player) {
@@ -59,4 +66,4 @@ async function saveSolution(findVal, gameArray, answer, options, player) {
   return result;
 }
 
-module.exports = { getIndexOfValue, saveSolution };
+module.exports = { getIndexOfValue, saveSolution, getTimes };

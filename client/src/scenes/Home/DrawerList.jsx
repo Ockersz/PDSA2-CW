@@ -1,5 +1,6 @@
 // DrawerList.js
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
+import SsidChartIcon from "@mui/icons-material/SsidChart";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -10,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/system";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
 const DrawerList = ({ onClose, selectComp }) => {
   const navigate = useNavigate();
 
@@ -50,7 +50,11 @@ const DrawerList = ({ onClose, selectComp }) => {
               }}
             >
               <ListItemIcon>
-                <SportsEsportsIcon />
+                {text.label === "Charts" ? (
+                  <SsidChartIcon />
+                ) : (
+                  <SportsEsportsIcon />
+                )}
               </ListItemIcon>
               <ListItemText primary={text.label} />
             </ListItemButton>
