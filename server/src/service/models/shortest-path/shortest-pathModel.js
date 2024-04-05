@@ -1,7 +1,8 @@
 const { createGraph, addEdgeByLabels } = require("./graphModel");
-const { test } = require("./dijkstraTest");
-const { json } = require("express");
-// Step 1: Generate random distances between cities
+const { checkShortestPath } = require("./dijkstraTest");
+const shortestPathModel = require("../../db-models/shortestPathModel");
+const shortestPathTimeModel = require("../../db-models/shortestPathAlgoTimes");
+
 function generateRandomDistances() {
   let graph = createGraph();
   let vertices = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
@@ -57,19 +58,17 @@ function startGame() {
 }
 
 async function saveSolution(source, destination, path, player, graph) {
-  console.log("source", source);
-  console.log("destination", destination);
-  console.log("path", path);
-  console.log("player", player);
-  console.log("graph", graph);
+  const res = checkShortestPath(graph, source, destination);
 
-  //const correctPath = findShortestPath(graph, source, destination);
-  //console.log("correctPath", correctPath);
-  const res = test(graph, source, destination);
+  const correctPath = res.dijk.path;
 
-  const correctPath = res.path;
+  if (res) {
+    await shortestPathTimeModel.create({
+      dijkstra: res.timeDijk,
+      bellmanFord: res.timeBell,
+    });
+  }
 
-  // Check if the player's path is correct
   let isCorrect = true;
 
   if (path.length !== correctPath.length) {
@@ -82,7 +81,17 @@ async function saveSolution(source, destination, path, player, graph) {
       break;
     }
   }
-  console.log("isCorrect", isCorrect);
+
+  if (isCorrect) {
+    await shortestPathModel.create({
+      start: source,
+      end: destination,
+      path,
+      distance: res.dijk.distance,
+      player,
+      graph,
+    });
+  }
 
   return {
     correct: isCorrect,
@@ -90,105 +99,5 @@ async function saveSolution(source, destination, path, player, graph) {
     playerPath: path,
   };
 }
-
-// class PriorityQueue {
-//   constructor() {
-//     this.queue = [];
-//   }
-
-//   enqueue(element, priority) {
-//     this.queue.push({ element, priority });
-//     this.sort();
-//   }
-
-//   dequeue() {
-//     return this.queue.shift().element;
-//   }
-
-//   sort() {
-//     this.queue.sort((a, b) => a.priority - b.priority);
-//   }
-
-//   isEmpty() {
-//     return this.queue.length === 0;
-//   }
-// }
-
-// // function dijkstra(graph, source) {
-// //   const vertices = Object.keys(graph);
-// //   const distances = {};
-// //   const previous = {};
-// //   const priorityQueue = new PriorityQueue();
-
-// //   vertices.forEach((vertex) => {
-// //     distances[vertex] = vertex === source ? 0 : Infinity;
-// //     priorityQueue.enqueue(vertex, distances[vertex]);
-// //     previous[vertex] = null;
-// //   });
-
-// //   while (!priorityQueue.isEmpty()) {
-// //     const currentVertex = priorityQueue.dequeue();
-
-// //     Object.keys(graph[currentVertex]).forEach((neighbor) => {
-// //       const distance =
-// //         distances[currentVertex] + graph[currentVertex][neighbor];
-// //       if (distance < distances[neighbor]) {
-// //         distances[neighbor] = distance;
-// //         previous[neighbor] = currentVertex;
-// //         priorityQueue.enqueue(neighbor, distance);
-// //       }
-// //     });
-// //   }
-
-// //   return { distances, previous };
-// // }
-
-// function shortestPath(graph, source, destination) {
-//   const weightedGraph = convertGraphWeights(graph);
-//   const { distances, previous } = dijkstra(weightedGraph, source);
-
-//   const path = findShortestPath(previous, source, destination);
-//   const distance = distances[destination];
-
-//   return { path, distance };
-// }
-
-// function findShortestPath(previous, source, destination) {
-//   const path = [destination];
-
-//   while (path[path.length - 1] !== source) {
-//     path.push(previous[path[path.length - 1]]);
-//   }
-
-//   path.reverse();
-
-//   return path;
-// }
-
-// function convertGraphWeights(graph) {
-//   const newGraph = {};
-
-//   for (const vertex in graph) {
-//     newGraph[vertex] = {};
-//     for (const neighbor in graph[vertex]) {
-//       newGraph[vertex][neighbor] = Number(graph[vertex][neighbor]);
-//     }
-//   }
-
-//   return newGraph;
-// }
-
-// // Step 3: Implement Bellman-Ford algorithm
-// function bellmanFord(graph, sourceCity) {
-//   // Implement Bellman-Ford algorithm to find shortest path and distance from sourceCity to all other cities
-// }
-
-// // Step 5: Verify user's response using Dijkstra's and Bellman-Ford algorithms
-
-// // Step 6: Record algorithm duration in database
-
-// // Step 7: Save correct answers in database
-
-// // Step 8: Write unit tests for implemented algorithms
 
 module.exports = { startGame, saveSolution };

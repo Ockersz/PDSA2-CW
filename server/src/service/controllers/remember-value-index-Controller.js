@@ -16,7 +16,7 @@ async function getTimeTaken(req, res) {
 }
 
 async function startgame(req, res) {
-  const result = startGame();
+  const result = await startGame();
   res.send(result);
 }
 

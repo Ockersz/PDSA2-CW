@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Swal from "sweetalert2";
 
@@ -28,7 +28,8 @@ const RememberValueIndex = () => {
   const [randomAnswer, setRandomAnswer] = useState(0);
   const [randomValue2, setRandomValue2] = useState(0);
   const [randomAnswer2, setRandomAnswer2] = useState(0);
-  const [open, setOpen] = React.useState(false);
+  const [savedArray, setSavedArray] = useState([]);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -54,10 +55,6 @@ const RememberValueIndex = () => {
       .catch((err) => {});
   }
 
-  useLayoutEffect(() => {
-    startGame();
-  }, []);
-
   const start = async () => {
     await startGame();
     setIsGameStarted(true);
@@ -71,7 +68,7 @@ const RememberValueIndex = () => {
         setCurrentIndex(index);
         displayNextValue(index + 1);
         setIsPlaying(true);
-        setTimerKey(Date.now()); // Reset timer
+        setTimerKey(Date.now());
       }, 2000);
       setTimeoutId(id);
     } else {
@@ -79,22 +76,24 @@ const RememberValueIndex = () => {
       setIsGameStarted(false);
       setDisplayedValue(null);
       //Timer ends
-      console.log("Timer ends");
       askQuestion();
     }
   };
 
   const askQuestion = () => {
     //get a random value from the array
-    setRandomValue(shortenedArray[Math.floor(Math.random() * 20)]);
-    setRandomValue2(shortenedArray[Math.floor(Math.random() * 20)]);
+    const rand1 = Math.floor(Math.random() * 19);
+    const rand2 = Math.floor(Math.random() * 19);
+    setSavedArray(shortenedArray);
+    setRandomValue(shortenedArray[rand1]);
+    setRandomValue2(shortenedArray[rand2]);
     handleOpen();
   };
 
-  const checkAnswer = () => {
+  const checkAnswer = (shortenedArrays) => {
     if (
-      randomAnswer === shortenedArray.indexOf(randomValue) &&
-      randomAnswer2 === shortenedArray.indexOf(randomValue2)
+      randomAnswer === savedArray.indexOf(parseInt(randomValue)) &&
+      randomAnswer2 === savedArray.indexOf(parseInt(randomValue2))
     ) {
       Swal.fire({
         icon: "success",
@@ -102,12 +101,16 @@ const RememberValueIndex = () => {
         text: "You got it right!",
       })
         .then(() => {
-          axios.post("rememberValueIndex/saveSolution", {
-            answer1: randomAnswer,
-            answer2: randomAnswer2,
-            gameArray: shortenedArray,
-            player: localStorage.getItem("username"),
-          });
+          axios
+            .post("rememberValueIndex/saveSolution", {
+              answer1: randomAnswer,
+              answer2: randomAnswer2,
+              gameArray: shortenedArrays,
+              player: localStorage.getItem("username"),
+            })
+            .then(() => {
+              setSavedArray([]);
+            });
         })
         .catch((err) => {});
     } else {
@@ -122,6 +125,7 @@ const RememberValueIndex = () => {
     setRandomAnswer2(0);
     setRandomValue(0);
     setRandomValue2(0);
+    stop();
   };
 
   const stop = () => {
@@ -320,7 +324,7 @@ const RememberValueIndex = () => {
               sx={{ mt: 2 }}
               onClick={() => {
                 handleClose();
-                checkAnswer();
+                checkAnswer(shortenedArray);
               }}
             >
               Confirm

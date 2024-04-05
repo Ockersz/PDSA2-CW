@@ -40,7 +40,6 @@ const TopText = styled(Card)({
 
 const SvgContainer = styled(Box)({
   flexGrow: 1,
-  backgroundColor: "#f0f0f0",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -251,7 +250,7 @@ function ShortestPath() {
           marginBottom="20px"
         >
           <Button
-            variant="contained"
+            variant="outlined"
             color="primary"
             onClick={handleStart}
             style={{ margin: "20px" }}
@@ -259,8 +258,8 @@ function ShortestPath() {
             New Game
           </Button>
           <Button
-            variant="contained"
-            color="secondary"
+            variant="outlined"
+            color="warning"
             onClick={handleEnd}
             style={{ margin: "20px" }}
           >
@@ -281,10 +280,10 @@ function ShortestPath() {
           </InfoBox>
         </Box>
 
-        <Button variant="contained" color="secondary" onClick={handleReset}>
+        <Button variant="outlined" color="warning" onClick={handleReset}>
           Reset
         </Button>
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
+        <Button variant="outlined" color="primary" onClick={handleSubmit}>
           Submit Answer
         </Button>
       </Sidebar>

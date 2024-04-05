@@ -14,6 +14,10 @@ const shortestPathSchema = new Schema({
     type: Array,
     required: true,
   },
+  distance: {
+    type: Number,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,

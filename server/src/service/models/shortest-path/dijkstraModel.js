@@ -59,7 +59,6 @@ function dijkstra(graph, start, end) {
   while (currentNode !== null) {
     path.unshift(currentNode);
     currentNode = previous.get(currentNode);
-    console.log(currentNode);
   }
 
   return {

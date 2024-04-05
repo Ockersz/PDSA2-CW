@@ -58,18 +58,8 @@ class Graph {
     }
 
     if (distances[destination] === Infinity) {
-      console.log("There is no path from", source, "to", destination);
       return null;
     } else {
-      console.log(
-        "Shortest distance from",
-        source,
-        "to",
-        destination + ":",
-        distances[destination]
-      );
-      console.log("Shortest path:", path.join(" -> "));
-
       return { distance: distances[destination], path };
     }
   }
@@ -101,9 +91,73 @@ function createGraph(graphData) {
   return graph;
 }
 
-function test(graph, source, destination) {
-  const graphs = createGraph(graph);
-  return graphs.dijkstra(source, destination);
+function bellmanFord(graph, startVertexKey, destinationVertexKey) {
+  const distances = {};
+  const previousVertices = {};
+
+  graph.vertices.forEach((vertexKey) => {
+    distances[vertexKey] = Infinity;
+    previousVertices[vertexKey] = null;
+  });
+
+  distances[startVertexKey] = 0;
+
+  for (let i = 0; i < graph.vertices.length - 1; i++) {
+    graph.vertices.forEach((vertexKey) => {
+      const vertex = graph.adjacencyList[vertexKey];
+      Object.keys(vertex).forEach((neighborKey) => {
+        const weight = vertex[neighborKey];
+        if (
+          distances[vertexKey] !== Infinity &&
+          distances[vertexKey] + weight < distances[neighborKey]
+        ) {
+          distances[neighborKey] = distances[vertexKey] + weight;
+          previousVertices[neighborKey] = vertexKey;
+        }
+      });
+    });
+  }
+
+  graph.vertices.forEach((vertexKey) => {
+    const vertex = graph.adjacencyList[vertexKey];
+    Object.keys(vertex).forEach((neighborKey) => {
+      const weight = vertex[neighborKey];
+      if (
+        distances[vertexKey] !== Infinity &&
+        distances[vertexKey] + weight < distances[neighborKey]
+      ) {
+        throw new Error("Graph contains negative weight cycle");
+      }
+    });
+  });
+
+  let shortestPath = [];
+  if (destinationVertexKey) {
+    let currentVertexKey = destinationVertexKey;
+    while (currentVertexKey !== null) {
+      shortestPath.unshift(currentVertexKey);
+      currentVertexKey = previousVertices[currentVertexKey];
+    }
+  }
+
+  return {
+    distance: distances[destinationVertexKey],
+    path: shortestPath,
+  };
 }
 
-module.exports = { test };
+function checkShortestPath(graph, source, destination) {
+  const graphs = createGraph(graph);
+  const startTimeBell = process.hrtime();
+  const bell = bellmanFord(graphs, source, destination);
+  const endTimeBell = process.hrtime(startTimeBell);
+  const startTimeDijk = process.hrtime();
+  const dijk = graphs.dijkstra(source, destination);
+  const endTimeDijk = process.hrtime(startTimeDijk);
+
+  const timeBell = endTimeBell[0] * 1000 + endTimeBell[1] / 1000000;
+  const timeDijk = endTimeDijk[0] * 1000 + endTimeDijk[1] / 1000000;
+  return { bell, dijk, timeBell, timeDijk };
+}
+
+module.exports = { checkShortestPath };
