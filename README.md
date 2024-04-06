@@ -1,5 +1,3 @@
-"# PDSA2-CW" 
-
 ## Introduction
 This is a coursework for the module Programming and Data Structures and Algorithms 2. The task is to implement 5 puzzles using any programming language. The puzzles are:
 1. **8 Queens**
