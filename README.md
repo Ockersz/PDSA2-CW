@@ -11,14 +11,14 @@ This is a coursework for the module Programming and Data Structures and Algorith
 ## Instructions to run the code
 
 ### Frontend
-**cd client**
-**npm install**
-**npm start**
+1. **cd client**
+2. **npm install**
+3. **npm start**
 
 ### Backend
-**cd server**
-**npm install**
-**npm run dev**
+1. **cd server**
+2. **npm install**
+3. **npm run dev**
 
 ### Requirements
 **Node.js v18** and **npm (latest)** should be installed on your machine.
