@@ -33,8 +33,14 @@ const Chart = () => {
       const res = await axios.get("predictValueIndex/getTimes");
       setSearchingTimes(res.data);
     }
+
+    async function fetchData3() {
+      const res = await axios.get("shortestPath/getlasttime");
+      console.log(res.data);
+    }
     fetchData();
     fetchData2();
+    fetchData3();
   }, []);
 
   //   {
@@ -57,6 +63,14 @@ const Chart = () => {
   //     "exponentialSearch": 0.0212,
   //     "fibonacciSearch": 0.0493,
   //     "date": "2024-04-05T21:12:18.513Z",
+  //     "__v": 0
+  // }
+
+  //   {
+  //     "_id": "6610c17fbdbb0d52b4fafeff",
+  //     "dijkstra": 0.3977,
+  //     "bellmanFord": 1.3651,
+  //     "date": "2024-04-06T03:29:03.820Z",
   //     "__v": 0
   // }
 
@@ -152,6 +166,41 @@ const Chart = () => {
                     "rgba(54, 162, 235, 1)",
                     "rgba(255, 206, 86, 1)",
                     "rgba(75, 192, 192, 1)",
+                  ],
+                  borderWidth: 1,
+                },
+              ],
+            }}
+            height={400}
+            width={600}
+            options={{
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            }}
+          />
+        </Box>
+      </Box>
+      <Box mt={2}>
+        <h3>Shortest Path Times</h3>
+        <Box>
+          <Bar
+            data={{
+              labels: ["Dijkstra", "Bellman Ford"],
+              datasets: [
+                {
+                  label: "Time (ms)",
+                  data: [0.3977, 1.3651],
+                  backgroundColor: [
+                    "rgba(255, 99, 132, 0.2)",
+                    "rgba(54, 162, 235, 0.2)",
+                  ],
+                  borderColor: [
+                    "rgba(255, 99, 132, 1)",
+                    "rgba(54, 162, 235, 1)",
                   ],
                   borderWidth: 1,
                 },

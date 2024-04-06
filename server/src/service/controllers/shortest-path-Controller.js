@@ -1,6 +1,7 @@
 const {
   startGame,
   saveSolution,
+  getLast,
 } = require("../models/shortest-path/shortest-pathModel");
 
 async function generateRandomDistancesController(req, res) {
@@ -19,7 +20,13 @@ async function submitDistanceController(req, res) {
   res.send(result);
 }
 
+async function getlasttime(req, res) {
+  const result = await getLast();
+  res.send(result);
+}
+
 module.exports = {
   generateRandomDistancesController,
   submitDistanceController,
+  getlasttime,
 };

@@ -22,16 +22,12 @@ function generateRandomDistances() {
 }
 
 function startGame() {
-  // Generate random distances between cities
   let graph = generateRandomDistances();
 
-  // Choose a random source city
   let sourceCity = Object.keys(graph)[Math.floor(Math.random() * 10)]; // Choose a random city from the graph
 
-  // Choose a random destination city
   let destinationCity = Object.keys(graph)[Math.floor(Math.random() * 10)]; // Choose a random city from the graph
 
-  // Source city should not be the same as destination city
   while (sourceCity === destinationCity) {
     destinationCity = Object.keys(graph)[Math.floor(Math.random() * 10)]; // Choose a random city from the graph
   }
@@ -89,4 +85,8 @@ async function saveSolution(source, destination, path, player, graph) {
   };
 }
 
-module.exports = { startGame, saveSolution };
+async function getLast() {
+  return await shortestPathTimeModel.findOne().sort({ _id: -1 });
+}
+
+module.exports = { startGame, saveSolution, getLast };

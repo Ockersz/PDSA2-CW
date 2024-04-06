@@ -206,6 +206,49 @@ function ShortestPath() {
   };
 
   const handleSubmit = async () => {
+    if (selectedPath[selectedPath.length - 1] !== destination) {
+      Swal.fire({
+        title: "Incorrect Answer",
+        text: "You have not reached the destination!",
+        icon: "error",
+        confirmButtonText: "Cool",
+      }).then(() => {
+        handleReset();
+      });
+      return;
+    }
+
+    if (
+      selectedPath.map((node) => node.toLowerCase()).join(" -> ") === "x -> y"
+    ) {
+      Swal.fire({
+        title: "Incorrect Answer",
+        text: "You have not found the shortest path!",
+        icon: "error",
+        confirmButtonText: "Cool",
+      }).then(() => {
+        handleReset();
+      });
+      return;
+    }
+
+    //see if the same city is visited twice
+    let visited = new Set();
+    for (let i = 0; i < selectedPath.length; i++) {
+      if (visited.has(selectedPath[i])) {
+        Swal.fire({
+          title: "Incorrect Answer",
+          text: "You have visited the same city twice!",
+          icon: "error",
+          confirmButtonText: "Cool",
+        }).then(() => {
+          handleReset();
+        });
+        return;
+      }
+      visited.add(selectedPath[i]);
+    }
+
     try {
       const response = await axios.post("shortestPath/submit", {
         path: selectedPath,

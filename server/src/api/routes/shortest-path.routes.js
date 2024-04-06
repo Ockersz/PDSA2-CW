@@ -8,5 +8,6 @@ router.use(bodyParser.json());
 
 router.get("/startgame", controller.generateRandomDistancesController);
 router.post("/submit", controller.submitDistanceController);
+router.get("/getlasttime", controller.getlasttime);
 
 module.exports = router;
